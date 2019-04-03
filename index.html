@@ -1,49 +1,517 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+	<title>De React 16.0 à React 16.8</title>
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section><h1>De React 16.0 à React 16.8</h1></section>
+			<section>Sébastien Quenet<br/>tech lead / coach agile @Abbeal<br/><br/><em>@Durnan (twitter)</em><br/><em>github.com/SebQuenet</em></section>
+			<section>Il va parler des hooks tout de suite ?
+				<p style="font-size:0.7em"><em>(Moi je suis venu pour les hooks...)</em></p>
+			</section>
+			<section>
+				<h3>Is Fiber ready yet ?</h3>
+				<img data-src="images/is-fiber-ready.png">
+			</section>
+			<section>
+				<section>
+					<h2>React 15.6</h2>
+					<h3>(La préhistoire)</h3>
+				</section>
+				<section>
+					<h3>Cycle de vie de React 15.6</h3>
+					<h4>Initialisation</h4>
+					<pre><code data-trim data-noescape>
+								<span>class MyShinyComponent extends Component {</span><br/><br/>
+								<span>&nbsp;&nbsp;componentWillMount() { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;render() { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;componentDidMount() { ... }</span><br/><br/>
+								<span>}<br/></span>
+							</code></pre>
+				</section>
+				<section>
+					<h3>Cycle de vie de React 15.6</h3>
+					<h4>Modification</h4>
+					<pre><code data-trim data-noescape>
+								<span>class MyShinyComponent extends Component {</span><br/><br/>
+								<span>&nbsp;&nbsp;componentWillReceiveProps(nextProps) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;shouldComponentUpdate(nextProps, nextState) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;componentWillUpdate(nextProps) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;render() { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;componentDidUpdate() { ... }</span><br/><br/>
+								<span>}<br/></span>
+							</code></pre>
+				</section>
+				<section>
+					<h3>Cycle de vie de React 15.6</h3>
+					<h4>Destruction</h4>
+					<pre>
+						<code data-trim data-noescape>
+							<span>class MyShinyComponent extends Component {</span><br /><br />
+							<span>&nbsp;&nbsp;componentWillUnmount() { ... }</span><br/><br/>
+							<span>}<br/></span>
+						</code>
+					</pre>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2>Tout va bien non ?</h2>
+						<ul>
+							<li>Lent avec les animations</span>
+							<li>DOM ultra verbeux</span>
+							<li>Pas facile à débugguer</span>
+							<li>Pas facile de faire des modales</span>
+							<li>Grappes de propriétés qu'on doit propager à travers la hiérarchie</span>
+							<li>React a besoin de libs externes</span>
+							<ul>
+								<li>redux</span>
+								<li>recompose</span>
+								<li>loadable</span>
+							</ul>
+						</ul>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2>React 16.0</h2>
+					<h3>26 septembre 2017</h3>
+						<ul>
+							<li>Fragments</span>
+							<li>Portals</span>
+							<li>Error boundaries</span>
+							<li>Async rendering</span>
+							<li>Server-side rendering improvements</span>
+						</ul>
+				</section>
+				<section data-transition="none-in">
+					<h3>Fragments</h3>
+					<pre>
+						<code data-trim data-noescape>
+							<span>render() {</span><br /><br />
+							<span>
+								&nbsp;&nbsp;return (<br/>
+								&nbsp;&nbsp;&lt;><br/>
+								&nbsp;&nbsp;&nbsp;&nbsp;&lt;div>Hello !&lt;/div>,<br/>
+								&nbsp;&nbsp;&nbsp;&nbsp;&lt;div>Hello world&lt;/div>,<br/>
+								&nbsp;&nbsp;&lt;/>);
+							</span><br/><br/>
+							<span>}<br/></span>
+						</code>
+					</pre>
+				</section>
+				<section>
+					<h3>Portals</h3>
+					<pre>
+						<code data-trim data-noescape>
+							<span>render() {</span><br /><br />
+							<span>
+								&nbsp;&nbsp;return ReactDOM.createPortal(<br/>
+								&nbsp;&nbsp;&nbsp;&nbsp;this.props.children,<br/>
+								&nbsp;&nbsp;&nbsp;&nbsp;domNode,<br/>
+								&nbsp;&nbsp;);
+							</span><br/><br/>
+							<span>}<br/></span>
+						</code>
+					</pre>
+				</section>
+				<section>
+					<h3>Error boundaries</h3>
+					<pre><code data-trim data-noescape>
+								<span>class MyShinyComponent extends Component {</span><br/><br/>
+								<span>&nbsp;&nbsp;componentWillReceiveProps(nextProps) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;shouldComponentUpdate(nextProps, nextState) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;componentWillUpdate(nextProps) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;render() { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;componentDidUpdate() { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;componentDidCatch(error) { ... }</span><br/><br/>
+								<span>}<br/></span>
+							</code>
+						</pre>
+				</section>
+				<section data-transition="none-in">
+					<h3>Async rendering</h3>
+					<pre><code data-trim data-noescape>
+								<span>class MyShinyComponent extends Component {</span><br /><br />
+								<span>&nbsp;&nbsp;UNSAFE_componentWillMount() { ... }</span><br /><br />
+								<span>&nbsp;&nbsp;UNSAFE_componentWillReceiveProps() { ... }</span><br /><br />
+								<span>&nbsp;&nbsp;UNSAFE_componentWillUpdate() { ... }</span><br /><br />
+								<span>}<br /></span>
+								</code></pre>
+				</section>
+				<section>
+					<h3>Server-side rendering</h3>
+						<ul>
+							<li>Faster</span>
+							<li>ReactDOM.hydrate()</span>
+							<li>Streaming</span>
+						</ul>
+				</section>
+			</section>
+			<section>
+				<p style="font-size:0.7em"><em>Pardon mais c'est maintenant les hooks ?<br/>C'est que j'ai peur qu'il ne reste pas assez de temps...</em></p>
+			</section>
+			<section>
+				<section>
+					<h2>React 16.3</h2>
+					<h3>29 mars 2018</h3>
+						<ul>
+							<li>Strict Mode</span>
+							<li>Context API</span>
+							<li>React.createRef() & React.forwardRef()</span>
+							<li>getDerivatedStateFromProps()</span>
+							<li>getSnapshotBeforeUpdate()</span>
+						</ul>
+				</section>
+				<section>
+					<h3>Strict Mode</h3>
+					<pre>
+						<code data-trim data-noescape>
+							<span>&lt;div><br /></span>
+							<span>&nbsp;&nbsp;&lt;React.StrictMode><br /></span>
+							<span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;MyComponentTree /><br /></span>
+							<span>&nbsp;&nbsp;&lt;/React.StrictMode><br /></span>
+							<span>&lt;/div><br /></span>
+						</code>
+					</pre>
+				</section>
+				<section data-transition="none-out">
+					<h3>Context API</h3>
+					<pre>
+						<code data-trim data-noescape>
+							<span><br/></span>
+							<span><br/></span>
+							<span><br/></span>
+							<span>&nbsp;&nbsp;&lt;OldGrandPa myLegacy={oldGrandPaLegacy}><br /></span>
+							<span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;Daddy myLegacy={this.props.myLegacy}><br /></span>
+							<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Myself myLegacy={this.props.myLegacy}><br /></span>
+							<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;MyChild myLegacy={this.props.myLegacy} /><br /></span>
+							<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/MySelf><br /></span>
+							<span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/Daddy><br /></span>
+							<span>&nbsp;&nbsp;&lt;/OldGrandPa><br /></span>
+							<br />
+						</code>
+					</pre>
+				</section>
+				<section data-transition="none-in">
+					<h3>Context API - Provider</h3>
+					<pre>
+						<code data-trim data-noescape>
+							<span>const LegacyContext = React.createContext([]);<br /></span>
+							<span><br/></span>
+							<span>&lt;LegacyContext.Provider value={['pair of socks']}><br/></span>
+							<span>&nbsp;&nbsp;&lt;OldGrandPa><br /></span>
+							<span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;Daddy><br /></span>
+							<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Myself><br /></span>
+							<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;MyChild/><br /></span>
+							<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/MySelf><br /></span>
+							<span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/Daddy><br /></span>
+							<span>&nbsp;&nbsp;&lt;/OldGrandPa><br /></span>
+							<span>&lt;LegacyContext.Provider><br/></span>
+						</code>
+					</pre>
+				</section>
+				<section>
+					<h3>Context API - contextType (React 16.5)</h3>
+					<pre>
+						<code data-trim data-noescape>
+							<span>class Myself extends React.Component {<br /></span>
+							<span>&nbsp;&nbsp;static contextType = LegacyContext;<br /></span>
+							<span>&nbsp;&nbsp;render() {<br /></span>
+							<span>&nbsp;&nbsp;&nbsp;&nbsp;return &lt;MyChild myLegacy={context}>;<br /></span>
+							<span>&nbsp;&nbsp;}<br /></span>
+							<span>}<br /></span>
+						</code>
+					</pre>
+				</section>
+				<section>
+					<h3>Context API - Consumer</h3>
+					<pre>
+						<code data-trim data-noescape>
+							<span>const LegacyContext = React.createContext([]);<br /></span>
+							<span><br/></span>
+							<span>&lt;LegacyContext.Provider value={['pair of socks']}><br/></span>
+							<span><br/></span>
+							<span>const myLegacyConsumer = () => (<br/></span>
+							<span><br/></span>
+							<span>&nbsp;&nbsp;&lt;LegacyContext.Consumer><br/></span>
+							<span>&nbsp;&nbsp;&nbsp;&nbsp;{ legacy => ( &lt;div> {legacy[0]} &lt;/div> ) }<br/></span>
+							<span>&nbsp;&nbsp;&lt;/LegacyContext.Consumer><br/></span>
+							<span><br/></span>
+							<span>)<br /></span>
+						</code>
+					</pre>
+				</section>
+				<section>
+					<h3>React.createRef()</h3>
+					<pre>
+						<code data-trim data-noescape>
+					class MyComponent extends React.Component {<br/>
+					  constructor(props) {<br/>
+					    super(props);<br/>
+					    this.inputRef = React.createRef();<br/>
+					  }<br/><br/>
+					  render() {<br/>
+					    return &lt;input type="text" ref={this.inputRef} />;<br/>
+					  }<br/><br/>
+					  componentDidMount() {<br/>
+					    this.inputRef.current.focus();<br/>
+					  }<br/>
+					}<br/>
+				</code></pre>	
+				</section>
+				<section>
+					<h3>React.forwardRef()</h3>
+					<pre>
+						<code data-trim data-noescape>
+							<br/>
+							const FancyButton = React.forwardRef((props, ref) => (<br/>
+							  &lt;button ref={ref} className="FancyButton"><br/>
+							    {props.children}<br/>
+							  &lt;/button><br/>
+							));<br/><br/> 
+							const ref = React.createRef();<br/>
+							&lt;FancyButton ref={ref}>Click me!&lt;/FancyButton>;<br/><br/>
+				</code></pre>	
+				</section>
+				<section data-transition="none-in">
+					<h3>get Derived State From Props</h3>
+					<pre><code data-trim data-noescape>
+								<span>class MyShinyComponent extends Component {</span><br/><br/>
+								<span>&nbsp;&nbsp;static getDerivedStateFromProps(props, state) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;shouldComponentUpdate(nextProps, nextState) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;render() { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;componentDidMount/Update() { ... }</span><br/><br/>
+								<span>}<br/></span>
+							</code></pre>
+				</section>
+				<section data-transition="none-in">
+					<h3>get Snapshot Before Update</h3>
+					<pre><code data-trim data-noescape>
+								<span>class MyShinyComponent extends Component {</span><br/><br/>
+								<span>&nbsp;&nbsp;static getDerivedStateFromProps(props, state) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;shouldComponentUpdate(nextProps, nextState) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;render() { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;getSnapshotBeforeUpdate(prevProps, prevState) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;componentDidUpdate(prevProps, prevState, snapshot) { ... }</span><br/><br/>
+								<span>}<br/></span>
+							</code></pre>
+				</section>
+			</section>
+			<section>
+				<h2>React 16.4</h2>
+				<h3>23 mai 2018</h3>
+				<ul>
+					<li>Pointer API</span>
+				</ul>
+			</section>
+			<section>
+				<h2>React 16.5</h2>
+				<h3>5 septembre 2018</h3>
+					<ul>
+						<li>React profiler</span>
+					</ul>
+			</section>
+			<section>
+				<section>
+					<h2>React 16.6</h2>
+					<h3>23 octobre 2018</h3>
+						<ul>
+							<li>getDerivedStateFromError</span>
+							<li>React.memo()</span>
+							<li>Code splitting</span>
+						</ul>
+				</section>
+				<section>
+					<h3>Error boundaries update</h3>
+					<pre><code data-trim data-noescape>
+								<span>class MyShinyComponent extends Component {</span><br/><br/>
+								<span>&nbsp;&nbsp;static getDerivedStateFromProps(props, state) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;shouldComponentUpdate(nextProps, nextState) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;render() { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;componentDidUpdate() { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;componentDidCatch(error) { ... }</span><br/><br/>
+								<span>&nbsp;&nbsp;static getDerivedStateFromError() { ... }</span><br/><br/>
+								<span>}<br/></span>
+							</code>
+						</pre>
+				</section>
+				<section>
+					<h3>React.memo()</h3>
+					<pre><code data-trim data-noescape>
+					  const MyComponent = React.memo((props) => {<br/>
+						  /* only rerenders if props change */<br/>
+						});<br/>
+					</code></pre>
+				</section>
+				<section>
+					<h3>Code splitting</h3>
+					<pre><code data-trim data-noescape>
+							import React, {<br/>
+							<span>  lazy,<br/></span>
+							<span>  Suspense,<br/></span>
+						  } from 'react';<br/><br/>
+							<span>const OtherComponent = lazy(<br/></span>
+							<span>  () => import('./OtherComponent')<br/>);</span><br/><br/>
+							<span>const MyComponent = () => (<br/>  &lt;Suspense fallback={&lt;div>Loading...&lt;/div>}><br/></span>
+							<span>    &lt;OtherComponent /><br/>
+							  &lt;/Suspense><br/>);<br/></span>
+					</code></pre>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2>React 16.8</h2>
+					<h3>6 février 2019</h3>
+					<h1>Hooks !</h1>
+					<p style="font-size:0.7em"><em>(c'est pas trop tôt ... j'étais venu pour ça...)</em></p>
+				</section>
+				<section>
+					<h3>useState</h3>
+						<pre><code data-trim data-noescape>
+							<span>const myComponent = newTitle => {<br/></span>
+							<span>  const [ counter, setCounter ] = useEffect(0);<br/></span>
+							<span>  setCounter(counter + 1);<br/></span>
+							<span>  return(&lt;div>{counter}&lt;/div>);<br/></span>
+							<span>}<br/></span>
+						</code></pre>
+				  </p>
+				</section>
+				<section>
+					<h3>useEffect</h3>
+						<pre><code data-trim data-noescape>
+							<span>const myComponent = () => {<br/></span>
+							<span>  const [ serviceData, setServiceData ] = useState(null);<br/></span>
+							<br/>
+							<span>  useEffect(<br/></span>
+							<span>    () => {<br/></span>
+							<span>      const serviceInstance = MyFancyService.connect();<br/></span>
+							<span>      setServiceData( serviceInstance.fetchData() );<br/></span>
+							<span>      return () => serviceInstance.disconnect();<br/></span>
+							<span>    },<br/></span>
+							<span>    []<br/></span>
+							<span>  );<br/></span>
+							<span>};<br/></span>
+						</code></pre>
+				  </p>
+				</section>
+				<section>
+					<h3>useContext</h3>
+					<pre><code data-trim data-noescape>
+					<span>const ThemeContext = React.createContext({color: 'salmon'});<br /></span>
+					<br/>
+					<span>const myComponent = () => {<br/></span>
+					<br/>
+					<span>  const theme = useContext(ThemeContext);<br/></span>
+					<br/>
+					<span>  return (&lt;p style={{ color: theme.color }}><br/></span>
+					<span>    Parce que, pourquoi pas ?<br/></span>
+					<span>  &lt;/p>);<br/></span>
+					<span>};<br/></span>
+				</code></pre>
+				</section>
+				<section>
+					<h3>useMemo</h3>
+						<pre><code data-trim data-noescape>
+							<span>const memoizedValue = useMemo(<br/></span>
+							<span>  () => computeValue(a, b),<br/></span>
+							<span>  [a, b]<br/></span>
+							<span>);<br/></span>
+						</code></pre>
+				  </p>
+				</section>
+				<section>
+					<h3>useCallback</h3>
+						<pre><code data-trim data-noescape>
+							<span>const memoizedCallback = useCallback(() => {</span><br/>
+							<span>  computeValue(a, b);</span><br/>
+							<span>}, [a, b]);</span><br/>
+						</code></pre>
+				  </p>
+				</section>
+				<section>
+					<h3>useReducer</h3>
+						<pre><code data-trim data-noescape>
+							<span>const reducer = (state, action) => {</span><br/>
+							<span>  switch(action.type) {</span><br/>
+							<span>    case 'inc': return state + 1;</span><br/>
+							<span>    case 'dec': return state - 1;</span><br/>
+							<span>  }</span><br/>
+							<span>};</span><br/>
+							<br />
+							<span>const component = (initialState = 0) => {</span><br/>
+							<span>  const [state, dispatch] = useReducer(reducer,initialState);</span><br/>
+							<span>  return (&lt;button onClick={() => dispatch({type: 'inc'})}/>);</span><br/>
+							<span>};</span><br/>
+						</code></pre>
+				</section>
+				<section>
+					<h3>Other built-in hooks</h3>
+						<ul>
+							<li>useRef()</span>
+							<li>useImperativeHandle()</span>
+							<li>useLayoutEffect()</span>
+							<li>useDebugValue()</span>
+						</ul>
+				</section>
+			</section>
+			<section>
+				<h2>Sources des slides téléchargeables ici :</h2>
+				<a href='https://github.com/SebQuenet/React16.8-pres'>https://github.com/SebQuenet/React16.8-pres</h2>
+			</section>
+			<section>
+				<h2>Merci !</h2>
+				<h2>Des questions ?</h2>
+			</section>
 		</div>
+	</div>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
 
-		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
-	</body>
+	<script>
+		// More info about config & dependencies:
+		// - https://github.com/hakimel/reveal.js#configuration
+		// - https://github.com/hakimel/reveal.js#dependencies
+		Reveal.initialize({
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js' },
+				{ src: 'plugin/markdown/markdown.js' },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+				{
+					src: 'node_modules/reveal-code-focus/reveal-code-focus.js',
+					async: true,
+					callback: function () {
+						RevealCodeFocus();
+					}
+				}
+
+			]
+		});
+	</script>
+</body>
+
 </html>
